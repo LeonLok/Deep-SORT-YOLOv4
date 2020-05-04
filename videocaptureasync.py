@@ -29,7 +29,7 @@ class VideoCaptureAsync():
 
     def update(self):
         while self.started:
-            sleep(0.01)
+            sleep(0.03)
             grabbed, frame = self.cap.read()
             with self.read_lock:
                 self.grabbed = grabbed
@@ -53,8 +53,6 @@ class VideoCaptureAsync():
 
     def get(self, x):
         return self.cap.get(x)
-
-
 
     def __exit__(self, exec_type, exc_value, traceback):
         self.cap.release()
