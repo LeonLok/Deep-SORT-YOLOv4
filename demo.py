@@ -15,7 +15,8 @@ from deep_sort import nn_matching
 from deep_sort.detection import Detection
 from deep_sort.tracker import Tracker
 from tools import generate_detections as gdet
-
+import imutils.video
+from videocaptureasync import VideoCaptureAsync
 
 warnings.filterwarnings('ignore')
 
@@ -33,16 +34,40 @@ def main(yolo):
     metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
     tracker = Tracker(metric)
 
-    video_capture = cv2.VideoCapture('video.webm')
-        
+    writeVideo_flag = True
+    asyncVideo_flag = False
+
+    file_path = 'video.webm'
+    if asyncVideo_flag :
+        video_capture = VideoCaptureAsync(file_path)
+    else:
+        video_capture = cv2.VideoCapture(file_path)
+
+    if asyncVideo_flag:
+        video_capture.start()
+
+    if writeVideo_flag:
+        if asyncVideo_flag:
+            w = int(video_capture.cap.get(3))
+            h = int(video_capture.cap.get(4))
+        else:
+            w = int(video_capture.get(3))
+            h = int(video_capture.get(4))
+        fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        out = cv2.VideoWriter('output_yolov4.avi', fourcc, 30, (w, h))
+        frame_index = -1
+
     fps = 0.0
+    fps_imutils = imutils.video.FPS().start()
+
     while True:
         ret, frame = video_capture.read()  # frame shape 640*480*3
         if ret != True:
-            break
+             break
+
         t1 = time.time()
 
-        image = Image.fromarray(frame[...,::-1]) #bgr to rgb
+        image = Image.fromarray(frame[...,::-1])  # bgr to rgb
         boxs = yolo.detect_image(image)[0]
         confidence = yolo.detect_image(image)[1]
 
@@ -74,7 +99,14 @@ def main(yolo):
             cv2.putText(frame, score + '%', (int(bbox[0]), int(bbox[3])), 0, 5e-3 * 130, (0,255,0),2)
             
         cv2.imshow('', frame)
-            
+
+        if writeVideo_flag: # and not asyncVideo_flag:
+            # save a frame
+            out.write(frame)
+            frame_index = frame_index + 1
+
+        fps_imutils.update()
+
         fps = (fps + (1./(time.time()-t1))) / 2
         print("FPS = %f"%(fps))
         
@@ -82,7 +114,17 @@ def main(yolo):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    video_capture.release()
+    fps_imutils.stop()
+    print('imutils FPS: {}'.format(fps_imutils.fps()))
+
+    if asyncVideo_flag:
+        video_capture.stop()
+    else:
+        video_capture.release()
+
+    if writeVideo_flag:
+        out.release()
+
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
