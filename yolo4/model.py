@@ -253,7 +253,7 @@ def yolo_eval(yolo_outputs,
               num_classes,
               image_shape,
               max_boxes=200,
-              score_threshold=.6,
+              score_threshold=.5,
               iou_threshold=.5):
     """Evaluate YOLO model on given input and return filtered boxes."""
     num_layers = len(yolo_outputs)
