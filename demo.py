@@ -68,8 +68,7 @@ def main(yolo):
         t1 = time.time()
 
         image = Image.fromarray(frame[...,::-1])  # bgr to rgb
-        boxs = yolo.detect_image(image)[0]
-        confidence = yolo.detect_image(image)[1]
+        boxs, confidence = yolo.detect_image(image)
 
         features = encoder(frame,boxs)
 
@@ -107,8 +106,9 @@ def main(yolo):
 
         fps_imutils.update()
 
-        fps = (fps + (1./(time.time()-t1))) / 2
-        print("FPS = %f"%(fps))
+        if not asyncVideo_flag:
+            fps = (fps + (1./(time.time()-t1))) / 2
+            print("FPS = %f"%(fps))
         
         # Press Q to stop!
         if cv2.waitKey(1) & 0xFF == ord('q'):
