@@ -26,7 +26,7 @@ Please note that Deep SORT is only trained on tracking people, so you'd need to 
 See https://github.com/nwojke/cosine_metric_learning.
 
 ## Performance
-Real-time FPS:
+Real-time FPS with video writing:
 * ~4.3fps with YOLO v3
 * ~10.6fps with YOLO v4
 
