@@ -64,7 +64,7 @@ out = cv2.VideoWriter('output_yolov4.avi', fourcc, 30, (w, h))
 See https://github.com/Ma-Dan/keras-yolo4.
 
 # Dependencies
-* Tensorflow 1.14
+* Tensorflow GPU 1.14
 * Keras 2.3.1
 * opencv-python 4.2.0
 * imutils 0.5.3
