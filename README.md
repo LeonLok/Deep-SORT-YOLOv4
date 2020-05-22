@@ -17,11 +17,17 @@ The white boxes are Deep SORT trackers and the blue boxes are YOLO v4 detections
 
 As you can see in the gif, asynchronous processing has better FPS but causes stuttering.
 
-This code only detects and tracks people, but can be changed to detect other objects by changing lines 101 and 102 in yolo.py:
+This code only detects and tracks people, but can be changed to detect other objects by changing lines 103 in yolo.py. For example, to detect people and cars, change
 ```
 if predicted_class != 'person':
     continue
 ```
+to
+```
+if predicted_class not in ('person', 'car'):
+    continue
+```
+
 Please note that Deep SORT is only trained on tracking people, so you'd need to train a model yourself for tracking other objects.
 See https://github.com/nwojke/cosine_metric_learning.
 
@@ -29,6 +35,8 @@ See https://github.com/nwojke/cosine_metric_learning.
 Real-time FPS with video writing:
 * ~4.3fps with YOLO v3
 * ~10.6fps with YOLO v4
+
+Turning off tracking gave ~12.5fps with YOLO v4.
 
 YOLO v4 performs much faster and appears to be more stable than YOLO v3. All tests were done using an Nvidia GTX 1070 8gb GPU
  and an i7-8700k CPU.
@@ -44,8 +52,9 @@ python demo.py
 ```
 
 ## Settings
-By default, video writing is turned on and asynchronous processing is turned off. These can be edited in demo.py by changing:
+By default, tracking and video writing is on and asynchronous processing is off. These can be edited in demo.py by changing:
 ```
+tracking = True
 writeVideo_flag = True
 asyncVideo_flag = False
 ```
