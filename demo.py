@@ -13,6 +13,7 @@ from yolo import YOLO
 from deep_sort import preprocessing
 from deep_sort import nn_matching
 from deep_sort.detection import Detection
+from deep_sort.detection_yolo import Detection_YOLO
 from deep_sort.tracker import Tracker
 from tools import generate_detections as gdet
 import imutils.video
@@ -29,11 +30,12 @@ def main(yolo):
     
     # Deep SORT
     model_filename = 'model_data/mars-small128.pb'
-    encoder = gdet.create_box_encoder(model_filename,batch_size=1)
+    encoder = gdet.create_box_encoder(model_filename, batch_size=1)
     
     metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
     tracker = Tracker(metric)
 
+    tracking = True
     writeVideo_flag = True
     asyncVideo_flag = False
 
@@ -68,35 +70,45 @@ def main(yolo):
         t1 = time.time()
 
         image = Image.fromarray(frame[...,::-1])  # bgr to rgb
-        boxs, confidence = yolo.detect_image(image)
+        boxes, confidence, classes = yolo.detect_image(image)
 
-        features = encoder(frame,boxs)
+        if tracking:
+            features = encoder(frame, boxes)
 
-        detections = [Detection(bbox, confidence, feature) for bbox, confidence, feature in zip(boxs, confidence, features)]
-        
+            detections = [Detection(bbox, confidence, cls, feature) for bbox, confidence, cls, feature in
+                          zip(boxes, confidence, classes, features)]
+        else:
+            detections = [Detection_YOLO(bbox, confidence, cls) for bbox, confidence, cls in
+                          zip(boxes, confidence, classes)]
+
         # Run non-maxima suppression.
         boxes = np.array([d.tlwh for d in detections])
         scores = np.array([d.confidence for d in detections])
         indices = preprocessing.non_max_suppression(boxes, nms_max_overlap, scores)
         detections = [detections[i] for i in indices]
-        
-        # Call the tracker
-        tracker.predict()
-        tracker.update(detections)
-        
-        for track in tracker.tracks:
-            if not track.is_confirmed() or track.time_since_update > 1:
-                continue 
-            bbox = track.to_tlbr()
-            cv2.rectangle(frame, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(255,255,255), 2)
-            cv2.putText(frame, str(track.track_id),(int(bbox[0]), int(bbox[1])),0, 5e-3 * 200, (0,255,0),2)
+
+        if tracking:
+            # Call the tracker
+            tracker.predict()
+            tracker.update(detections)
+
+            for track in tracker.tracks:
+                if not track.is_confirmed() or track.time_since_update > 1:
+                    continue
+                bbox = track.to_tlbr()
+                cv2.rectangle(frame, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])), (255, 255, 255), 2)
+                cv2.putText(frame, "ID: " + str(track.track_id), (int(bbox[0]), int(bbox[1])), 0,
+                            1.5e-3 * frame.shape[0], (0, 255, 0), 1)
 
         for det in detections:
             bbox = det.to_tlbr()
             score = "%.2f" % round(det.confidence * 100, 2)
-            cv2.rectangle(frame,(int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(255,0,0), 2)
-            cv2.putText(frame, score + '%', (int(bbox[0]), int(bbox[3])), 0, 5e-3 * 130, (0,255,0),2)
-            
+            cv2.rectangle(frame, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])), (255, 0, 0), 2)
+            if len(classes) > 0:
+                cls = det.cls
+                cv2.putText(frame, str(cls) + " " + score, (int(bbox[0]), int(bbox[3])), 0,
+                            1.5e-3 * frame.shape[0], (0, 255, 0), 1)
+
         cv2.imshow('', frame)
 
         if writeVideo_flag: # and not asyncVideo_flag:

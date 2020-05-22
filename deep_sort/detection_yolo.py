@@ -2,7 +2,7 @@
 import numpy as np
 
 
-class Detection(object):
+class Detection_YOLO(object):
     """
     This class represents a bounding box detection in a single image.
 
@@ -26,11 +26,10 @@ class Detection(object):
 
     """
 
-    def __init__(self, tlwh, confidence, cls, feature):
+    def __init__(self, tlwh, confidence, cls):
         self.tlwh = np.asarray(tlwh, dtype=np.float)
         self.confidence = float(confidence)
         self.cls = cls
-        self.feature = np.asarray(feature, dtype=np.float32)
 
     def to_tlbr(self):
         """Convert bounding box to format `(min x, min y, max x, max y)`, i.e.,

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Class definition of YOLO_v3 style detection model on image and video
+Class definition of YOLO_v4 style detection model on image and video
 """
 
 import colorsys
@@ -84,7 +84,7 @@ class YOLO(object):
             boxed_image = letterbox_image(image, new_image_size)
         image_data = np.array(boxed_image, dtype='float32')
 
-        #print(image_data.shape)
+        # print(image_data.shape)
         image_data /= 255.
         image_data = np.expand_dims(image_data, 0)  # Add batch dimension.
 
@@ -97,9 +97,10 @@ class YOLO(object):
             })
         return_boxes = []
         return_scores = []
+        return_class_names = []
         for i, c in reversed(list(enumerate(out_classes))):
             predicted_class = self.class_names[c]
-            if predicted_class != 'person':
+            if predicted_class != 'person':  # Modify to detect other classes.
                 continue
             box = out_boxes[i]
             score = out_scores[i]
@@ -107,16 +108,17 @@ class YOLO(object):
             y = int(box[0])
             w = int(box[3] - box[1])
             h = int(box[2] - box[0])
-            if x < 0 :
+            if x < 0:
                 w = w + x
                 x = 0
-            if y < 0 :
+            if y < 0:
                 h = h + y
                 y = 0
             return_boxes.append([x, y, w, h])
             return_scores.append(score)
+            return_class_names.append(predicted_class)
 
-        return return_boxes, return_scores
+        return return_boxes, return_scores, return_class_names
 
     def close_session(self):
         self.sess.close()
