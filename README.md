@@ -80,39 +80,22 @@ See https://github.com/Ma-Dan/keras-yolo4.
 * numpy 1.18.2
 * sklearn
 
-# Upgrading to run with Tensorflow 2.0 YOLO v4 model
+# Running with Tensorflow 2.0
+It is now possible to run with Tensorflow 2.0 by changing `linear_assignment.py` to `linear_assignment_tf2.py` and `generate_detections.py` to `generate_detections_tf2.py` within the necessary files when importing.
 
-Changes in files:
+## Conda environment used for Tensorflow 2.0
 
-Compatibility with Tf1 – tools/generate_detections.py
-
-    import tensorflow.compat.v1 as tf
-    tf.disable_v2_behavior()
-
-Deprecated linear assignment on new versions - deep_sort/linear_assignment.py
-
-    from scipy.optimize import linear_sum_assignment
-
-    indices = linear_sum_assignment(cost_matrix)
-    indices = np.asarray(indices)
-    indices = np.transpose(indices)
-
-Conda environmnet with the following versions:
-
-# Name                    Version                   Build  Channel
-imutils                   0.5.3                    pypi_0    pypi
-keras                     2.3.1                    pypi_0    pypi
-matplotlib                3.2.1                    pypi_0    pypi
-numpy                     1.18.4                   pypi_0    pypi
-opencv-python             4.2.0.34                 pypi_0    pypi
-pillow                    7.1.2                    pypi_0    pypi
-python                    3.6.10               h7579374_2
-scikit-learn              0.23.1                   pypi_0    pypi
-scipy                     1.4.1                    pypi_0    pypi
-sklearn                   0.0                      pypi_0    pypi
-tensorboard               2.2.1                    pypi_0    pypi
-tensorflow                2.0.0                    pypi_0    pypi
-tensorflow-estimator      2.1.0                    pypi_0    pypi
-tensorflow-gpu            2.2.0                    pypi_0    pypi
-
-
+* imutils                   0.5.3                    
+* keras                     2.3.1                    
+* matplotlib                3.2.1                    
+* numpy                     1.18.4                   
+* opencv-python             4.2.0.34                 
+* pillow                    7.1.2                    
+* python                    3.6.10               
+* scikit-learn              0.23.1                   
+* scipy                     1.4.1                    
+* sklearn                   0.0                     
+* tensorboard               2.2.1                    
+* tensorflow                2.0.0                    
+* tensorflow-estimator      2.1.0                    
+* tensorflow-gpu            2.2.0                    
