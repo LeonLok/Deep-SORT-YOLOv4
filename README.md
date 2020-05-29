@@ -80,11 +80,11 @@ See https://github.com/Ma-Dan/keras-yolo4.
 * numpy 1.18.2
 * sklearn
 
-## Running with Tensorflow 2.0
-It is now possible to run with Tensorflow 2.0 by changing `linear_assignment.py` to `linear_assignment_tf2.py` and `generate_detections.py` to `generate_detections_tf2.py` within the necessary files when importing.
+## Running with Tensorflow 1.14 vs 2.0
+Navigate to the appropriate folder and run python scripts. 
 
 ### Conda environment used for Tensorflow 2.0
-
+(see requirements.txt)
 * imutils                   0.5.3                    
 * keras                     2.3.1                    
 * matplotlib                3.2.1                    
