@@ -82,7 +82,7 @@ out = cv2.VideoWriter('output_yolov4.avi', fourcc, 30, (w, h))
 ```
 
 ### Deep SORT with low confidence track filtering
-This has the option to hide object detections instead of hiding tracking. The settings in demo.py are
+This version has the option to hide object detections instead of tracking. The settings in demo.py are
 ```
 show_detections = True
 writeVideo_flag = True
