@@ -7,12 +7,17 @@ This project was inspired by:
 I swapped out YOLO v3 for YOLO v4 and added the option for asynchronous processing, which significantly improves
 the FPS. However, FPS monitoring is disabled when asynchronous processing is used since it isn't accurate.
 
+I also took the algorithm from this ![paper](https://www.researchgate.net/publication/337541842_Vehicle_Tracking_Using_Deep_SORT_with_Low_Confidence_Track_Filtering) and implemented it into deep_sort/track.py.
+The original method of confirming tracks was simply based on the number of times an object has been detected, leading to a high tracking false positive rate when lower detection thresholds are used. Low confidence track filtering reduces this significantly by calculating the average detection confidence over a set number of detections before confirming a track.
+
+See the comparison video below.
+
 ## Low confidence track filtering
 [![Comparison Video Link](https://img.youtube.com/vi/01Geud6GmB4/0.jpg)](https://youtu.be/01Geud6GmB4)
 
 Navigate to the appropriate folder to use low confidence track filtering. The above video demonstrates the difference.
 
-I took the algorithm from this ![paper](https://www.researchgate.net/publication/337541842_Vehicle_Tracking_Using_Deep_SORT_with_Low_Confidence_Track_Filtering) and implemented it into deep_sort/track.py. This reduces tracking false positives by calculating the average detection confidence over a set number of detections before a track is initiated. The average detection threshold (`adc_threshold`) and the number of detections (`n_init`) can be changed in deep_sort/tracker.py.
+See the settings section for parameter instructions.
 
 ## YOLO v3 and YOLO v4 comparison video with Deep SORT
 [![Comparison Video Link](https://img.youtube.com/vi/_8WkO3hVOlY/0.jpg)](https://youtu.be/_8WkO3hVOlY)
@@ -57,6 +62,8 @@ python demo.py
 ```
 
 ## Settings
+
+### Normal Deep SORT
 By default, tracking and video writing is on and asynchronous processing is off. These can be edited in demo.py by changing:
 ```
 tracking = True
@@ -73,6 +80,18 @@ To change output settings in demo.py:
 ```
 out = cv2.VideoWriter('output_yolov4.avi', fourcc, 30, (w, h))
 ```
+
+### Deep SORT with low confidence track filtering
+This has the option to hide object detections instead of hiding tracking. The settings in demo.py are
+```
+show_detections = True
+writeVideo_flag = True
+asyncVideo_flag = False
+```
+
+Setting `show_detections = False` will hide object detections and show the average detection confidence and the most commonly detected class for each track.
+
+To modify the average detection threshold, go to `deep_sort/tracker.py` and change the `adc_threshold` argument on line 40. You can also change the number of steps that the detection confidence will be averaged over by changing `n_init` here.
 
 # Training your own YOLO v4 model
 See https://github.com/Ma-Dan/keras-yolo4.
