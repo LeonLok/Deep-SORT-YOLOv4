@@ -1,0 +1,16 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: linux-64
+imutils=0.5.3=pypi_0
+keras=2.3.1=pypi_0
+matplotlib=3.2.1=pypi_0
+numpy=1.18.4=pypi_0
+opencv-python=4.2.0.34=pypi_0
+pillow=7.1.2=pypi_0
+python=3.6.10=h7579374_2
+scikit-learn=0.23.1=pypi_0
+scipy=1.4.1=pypi_0
+tensorboard=2.2.1=pypi_0
+tensorflow=2.0.0=pypi_0
+tensorflow-estimator=2.1.0=pypi_0
+tensorflow-gpu=2.2.0=pypi_0
