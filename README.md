@@ -12,7 +12,7 @@ the FPS. However, FPS monitoring is disabled when asynchronous processing is use
 
 Navigate to the appropriate folder to use low confidence track filtering. The above video demonstrates the difference.
 
-I took the algorithm from this [https://www.researchgate.net/publication/337541842_Vehicle_Tracking_Using_Deep_SORT_with_Low_Confidence_Track_Filtering](paper) and implemented it into deep_sort/track.py. This reduces tracking false positives by calculating the average detection confidence over a set number of detections before a track is initiated. The average detection threshold (`adc_threshold`) and the number of detections (`n_init`) can be changed in deep_sort/tracker.py.
+I took the algorithm from this ![paper](https://www.researchgate.net/publication/337541842_Vehicle_Tracking_Using_Deep_SORT_with_Low_Confidence_Track_Filtering) and implemented it into deep_sort/track.py. This reduces tracking false positives by calculating the average detection confidence over a set number of detections before a track is initiated. The average detection threshold (`adc_threshold`) and the number of detections (`n_init`) can be changed in deep_sort/tracker.py.
 
 ## YOLO v3 and YOLO v4 comparison video with Deep SORT
 [![Comparison Video Link](https://img.youtube.com/vi/_8WkO3hVOlY/0.jpg)](https://youtu.be/_8WkO3hVOlY)
