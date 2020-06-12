@@ -38,9 +38,6 @@ if predicted_class not in ('person', 'car'):
     continue
 ```
 
-Please note that Deep SORT is only trained on tracking people, so you'd need to train a model yourself for tracking other objects.
-See https://github.com/nwojke/cosine_metric_learning.
-
 ## Performance
 Real-time FPS with video writing:
 * ~4.3fps with YOLO v3
@@ -93,8 +90,14 @@ Setting `show_detections = False` will hide object detections and show the avera
 
 To modify the average detection threshold, go to `deep_sort/tracker.py` and change the `adc_threshold` argument on line 40. You can also change the number of steps that the detection confidence will be averaged over by changing `n_init` here.
 
-# Training your own YOLO v4 model
+# Training your own models
+## YOLO v4
 See https://github.com/Ma-Dan/keras-yolo4.
+
+## Deep SORT
+Please note that the tracking model used here is only trained on tracking people, so you'd need to train a model yourself for tracking other objects.
+
+See https://github.com/nwojke/cosine_metric_learning.
 
 # Dependencies
 * Tensorflow GPU 1.14
