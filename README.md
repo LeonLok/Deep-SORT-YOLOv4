@@ -7,7 +7,7 @@ This project was inspired by:
 I swapped out YOLO v3 for YOLO v4 and added the option for asynchronous processing, which significantly improves
 the FPS. However, FPS monitoring is disabled when asynchronous processing is used since it isn't accurate.
 
-I also took the algorithm from this ![paper](https://www.researchgate.net/publication/337541842_Vehicle_Tracking_Using_Deep_SORT_with_Low_Confidence_Track_Filtering) and implemented it into deep_sort/track.py.
+I also took the algorithm from this [paper](https://www.researchgate.net/publication/337541842_Vehicle_Tracking_Using_Deep_SORT_with_Low_Confidence_Track_Filtering) and implemented it into deep_sort/track.py.
 The original method of confirming tracks was simply based on the number of times an object has been detected, leading to a high tracking false positive rate when lower detection thresholds are used. Low confidence track filtering reduces this significantly by calculating the average detection confidence over a set number of detections before confirming a track.
 
 See the comparison video below.
