@@ -7,8 +7,8 @@ This project was inspired by:
 I swapped out YOLO v3 for YOLO v4 and added the option for asynchronous processing, which significantly improves
 the FPS. However, FPS monitoring is disabled when asynchronous processing is used since it isn't accurate.
 
-I also took the algorithm from this [paper](https://www.researchgate.net/publication/337541842_Vehicle_Tracking_Using_Deep_SORT_with_Low_Confidence_Track_Filtering) and implemented it into deep_sort/track.py.
-The original method of confirming tracks was simply based on the number of times an object has been detected, leading to a high tracking false positive rate when lower detection thresholds are used. Low confidence track filtering reduces this significantly by calculating the average detection confidence over a set number of detections before confirming a track.
+In addition, I took the algorithm from this [paper](https://www.researchgate.net/publication/337541842_Vehicle_Tracking_Using_Deep_SORT_with_Low_Confidence_Track_Filtering) and implemented it into `deep_sort/track.py`.
+The original method for confirming tracks was based simply on the number of times an object has been detected without considering detection confidence, leading to high tracking false positive rates when unreliable detections occur (i.e. low confidence true positives or high confidence false positives). The track filtering algorithm reduces this significantly by calculating the average detection confidence over a set number of detections before confirming a track.
 
 See the comparison video below.
 
@@ -27,7 +27,7 @@ See the settings section for parameter instructions.
 
 As you can see in the gif, asynchronous processing has better FPS but causes stuttering.
 
-This code only detects and tracks people, but can be changed to detect other objects by changing lines 103 in yolo.py. For example, to detect people and cars, change
+This code only detects and tracks people, but can be changed to detect other objects by changing lines 103 in `yolo.py`. For example, to detect people and cars, change
 ```
 if predicted_class != 'person':
     continue
@@ -49,7 +49,7 @@ YOLO v4 performs much faster and appears to be more stable than YOLO v3. All tes
  and an i7-8700k CPU.
 
 # Quick start
-[Download](https://drive.google.com/open?id=1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT) and convert the Darknet YOLO v4 model  to a Keras model by modifying convert.py accordingly and run:
+[Download](https://drive.google.com/open?id=1cewMfusmPjYWbrnuJRuKhPMwRe_b9PaT) and convert the Darknet YOLO v4 model  to a Keras model by modifying `convert.py` accordingly and run:
 ```
 python convert.py
 ```
@@ -61,25 +61,25 @@ python demo.py
 ## Settings
 
 ### Normal Deep SORT
-By default, tracking and video writing is on and asynchronous processing is off. These can be edited in demo.py by changing:
+By default, tracking and video writing is on and asynchronous processing is off. These can be edited in `demo.py` by changing:
 ```
 tracking = True
 writeVideo_flag = True
 asyncVideo_flag = False
 ```
 
-To change target file in demo.py:
+To change target file in `demo.py`:
 ```
 file_path = 'video.webm'
 ```
 
-To change output settings in demo.py:
+To change output settings in `demo.py`:
 ```
 out = cv2.VideoWriter('output_yolov4.avi', fourcc, 30, (w, h))
 ```
 
 ### Deep SORT with low confidence track filtering
-This version has the option to hide object detections instead of tracking. The settings in demo.py are
+This version has the option to hide object detections instead of tracking. The settings in `demo.py` are
 ```
 show_detections = True
 writeVideo_flag = True
