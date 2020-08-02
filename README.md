@@ -121,7 +121,7 @@ Navigate to the appropriate folder and run python scripts.
 * python                    3.6.10               
 * scikit-learn              0.23.1                   
 * scipy                     1.4.1                    
-* sklearn                   0.0                     
+* sklearn                   0.19                     
 * tensorboard               2.2.1                    
 * tensorflow                2.0.0                    
 * tensorflow-estimator      2.1.0                    
