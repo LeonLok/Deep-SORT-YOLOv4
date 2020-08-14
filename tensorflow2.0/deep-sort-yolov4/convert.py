@@ -40,6 +40,7 @@ class Yolo4(object):
 
         num_anchors = len(self.anchors)
         num_classes = len(self.class_names)
+        print(num_classes)
 
         # Generate colors for drawing bounding boxes.
         hsv_tuples = [(x / len(self.class_names), 1., 1.)
@@ -69,10 +70,16 @@ class Yolo4(object):
         bns_to_load = []
         for i in range(len(self.yolo4_model.layers)):
             layer_name = self.yolo4_model.layers[i].name
-            if layer_name.startswith('conv2d_'):
-                convs_to_load.append((int(layer_name[7:]), i))
-            if layer_name.startswith('batch_normalization_'):
-                bns_to_load.append((int(layer_name[20:]), i))
+            if layer_name.startswith('conv2d'):
+                if layer_name == 'conv2d':
+                    convs_to_load.append((0, i))
+                else:
+                    convs_to_load.append((int(layer_name[7:]), i))
+            if layer_name.startswith('batch_normalization'):
+                if layer_name == 'batch_normalization':
+                    bns_to_load.append((0, i))
+                else:
+                    bns_to_load.append((int(layer_name[20:]), i))
 
         convs_sorted = sorted(convs_to_load, key=itemgetter(0))
         bns_sorted = sorted(bns_to_load, key=itemgetter(0))
@@ -124,7 +131,6 @@ class Yolo4(object):
                     bn_weights[2]  # running var
                 ]
                 self.yolo4_model.layers[bns_sorted[bn_index][1]].set_weights(bn_weight_list)
-
                 conv_weights = np.ndarray(
                     shape=darknet_w_shape,
                     dtype='float32',
