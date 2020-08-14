@@ -69,10 +69,16 @@ class Yolo4(object):
         bns_to_load = []
         for i in range(len(self.yolo4_model.layers)):
             layer_name = self.yolo4_model.layers[i].name
-            if layer_name.startswith('conv2d_'):
-                convs_to_load.append((int(layer_name[7:]), i))
-            if layer_name.startswith('batch_normalization_'):
-                bns_to_load.append((int(layer_name[20:]), i))
+            if layer_name.startswith('conv2d'):
+                if layer_name == 'conv2d':
+                    convs_to_load.append((0, i))
+                else:
+                    convs_to_load.append((int(layer_name[7:]), i))
+            if layer_name.startswith('batch_normalization'):
+                if layer_name == 'batch_normalization':
+                    bns_to_load.append((0, i))
+                else:
+                    bns_to_load.append((int(layer_name[20:]), i))
 
         convs_sorted = sorted(convs_to_load, key=itemgetter(0))
         bns_sorted = sorted(bns_to_load, key=itemgetter(0))
