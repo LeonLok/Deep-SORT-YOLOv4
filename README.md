@@ -97,7 +97,9 @@ See https://github.com/Ma-Dan/keras-yolo4.
 ## Deep SORT
 Please note that the tracking model used here is only trained on tracking people, so you'd need to train a model yourself for tracking other objects.
 
-See https://github.com/nwojke/cosine_metric_learning.
+See https://github.com/nwojke/cosine_metric_learning for more details on training your own tracking model.
+
+For those that want to train their own **vehicle** tracking model, I've created a tool for converting the [DETRAC](http://detrac-db.rit.albany.edu/) dataset into a trainable format for cosine metric learning and can be found in my object tracking repository [here](https://github.com/LeonLok/Multi-Camera-Live-Object-Tracking/tree/master/detrac_tools). The tool was created using the earlier mentioned [paper](https://ieeexplore.ieee.org/document/8909903) as reference with the same parameters.
 
 # Dependencies
 * Tensorflow GPU 1.14
